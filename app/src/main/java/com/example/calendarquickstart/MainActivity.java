@@ -140,6 +140,7 @@ public class MainActivity extends Activity {
     protected void onActivityResult(
             int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        //TODO: Move this stuff into a Settings page
         switch (requestCode) {
             case REQUEST_GOOGLE_PLAY_SERVICES:
                 if (resultCode == RESULT_OK) {
@@ -189,6 +190,7 @@ public class MainActivity extends Activity {
         } else {
             if (isDeviceOnline()) {
                 Log.d("MainActivity", "Refresh data");
+                //TODO: Replace AsyncTask with RxJava. This will also allow to remove runOnUIThread
                 new ApiAsyncTask(this).execute();
             } else {
                 showMessage("No network connection available.");
@@ -221,6 +223,7 @@ public class MainActivity extends Activity {
         });
     }
 
+    //TODO: Make this into it's own custom view which receives the room details
     private void showFree(Reservation reservation) {
         vwContainer.setBackgroundColor(ContextCompat.getColor(this, R.color.free));
         txtStatus.setTextColor(ContextCompat.getColor(this, R.color.booked));
@@ -246,6 +249,7 @@ public class MainActivity extends Activity {
                 R.drawable.ic_flux_logo_free, getTheme()));
     }
 
+    //TODO: Make this into it's own custom view which receives the room details and reservation
     private void showBooked(Reservation reservation) {
         vwContainer.setBackgroundColor(ContextCompat.getColor(this, R.color.booked));
         txtStatus.setTextColor(ContextCompat.getColor(this, R.color.free));
@@ -352,6 +356,7 @@ public class MainActivity extends Activity {
         Toast.makeText(MainActivity.this, message, Toast.LENGTH_LONG).show();
     }
 
+    //TODO: Find a better way to refresh the screen regularly
     final Handler handler = new Handler();
 
     final Runnable refreshDataRunnable = new Runnable() {
