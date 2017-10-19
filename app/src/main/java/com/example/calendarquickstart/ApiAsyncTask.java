@@ -70,16 +70,17 @@ public class ApiAsyncTask extends AsyncTask<Void, Void, Void> {
 
         //CalendarList list = mActivity.mService.calendarList().list().execute();
 
-        DateTime now = new DateTime(System.currentTimeMillis() - 60 * 1000 * 60 * 12);
+        DateTime now = new DateTime(System.currentTimeMillis());
+        DateTime fetchFrom = new DateTime(now.getValue() - 60 * 1000 * 60 * 12);
         Events events = mActivity.mService.events().list("fluxfederation.com_2d35333437393138333334@resource.calendar.google.com")
                 .setMaxResults(10)
-                .setTimeMin(now)
+                .setTimeMin(fetchFrom)
                 .setOrderBy("startTime")
                 .setSingleEvents(true)
                 .execute();
         List<Event> items = events.getItems();
 
-        Reservation reservation = new Reservation();
+        Reservation reservation = new Reservation(new Date(now.getValue()));
 
         for (Event event : items) {
             Date start = new Date(event.getStart().getDateTime().getValue());
@@ -90,7 +91,6 @@ public class ApiAsyncTask extends AsyncTask<Void, Void, Void> {
                 reservation.setReservationRoom(event.getLocation());
                 reservation.setReservationOwner(event.getOrganizer());
                 reservation.setReservationTitle(event.getSummary());
-                reservation.setCurrentTime(current);
                 reservation.setReservationStart(start);
                 reservation.setReservationEnd(end);
             }

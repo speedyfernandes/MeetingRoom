@@ -22,8 +22,9 @@ public class Reservation {
     private Event.Organizer reservationOwner;
     private String reservationTitle;
 
-    Reservation() {
+    public Reservation(Date currentTime) {
         booked = false;
+        this.currentTime = currentTime;
     }
 
     public String getStatus() {
@@ -35,6 +36,11 @@ public class Reservation {
     }
 
     public String getReservationRoom() {
+        // TODO: Move the room name to the Settings model
+        if(reservationRoom == null) {
+            return "Bashir";
+        }
+
         return reservationRoom.replace("MR_", "");
     }
 
@@ -43,6 +49,11 @@ public class Reservation {
     }
 
     public String getReservationOwner() {
+        // TODO: Move this to the view layer
+        if(reservationOwner == null) {
+            return "Using Google Calendars";
+        }
+
         return reservationOwner.getDisplayName() != null ?
                 reservationOwner.getDisplayName() :
                 reservationOwner.getEmail().replace("@fluxfederation.com", "").replace(".", " ");
@@ -53,6 +64,11 @@ public class Reservation {
     }
 
     public String getReservationTitle() {
+        // TODO: Move this to the view layer
+        if(reservationTitle == null) {
+            return "Book Meeting Room";
+        }
+
         return reservationTitle;
     }
 
@@ -77,6 +93,11 @@ public class Reservation {
     }
 
     public String getReservationTime() {
+        // TODO: Move this to the view layer
+        if(reservationStart == null || reservationEnd == null) {
+            return " ";
+        }
+
         return String.format("%s - %s", iso8601(reservationStart), iso8601(reservationEnd));
     }
 
