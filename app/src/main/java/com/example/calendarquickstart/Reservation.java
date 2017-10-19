@@ -27,8 +27,8 @@ public class Reservation {
         this.currentTime = currentTime;
     }
 
-    public String getStatus() {
-        return booked ? "Booked" : "Free";
+    public boolean isBooked() {
+        return booked;
     }
 
     public void setBooked(boolean booked) {

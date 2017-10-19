@@ -9,7 +9,9 @@ import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -51,6 +53,7 @@ public class MainActivity extends Activity {
     private TextView txtFirstDetail;
     private TextView txtSecondDetail;
     private TextView txtThirdDetail;
+    private View vwContainer;
 
     /**
      * Create the main activity.
@@ -63,6 +66,7 @@ public class MainActivity extends Activity {
 
         setContentView(R.layout.activity_main);
 
+        vwContainer = findViewById(R.id.vwContainer);
         txtRoom = (TextView) findViewById(R.id.txtRoom);
         txtStatus = (TextView) findViewById(R.id.txtStatus);
         txtTime = (TextView) findViewById(R.id.txtTime);
@@ -182,15 +186,41 @@ public class MainActivity extends Activity {
                 if (reservation == null) {
                     showMessage("Error retrieving data!");
                 } else {
-                    txtRoom.setText(reservation.getReservationRoom());
-                    txtStatus.setText(reservation.getStatus());
-                    txtTime.setText(reservation.getCurrentTime());
-                    txtFirstDetail.setText(reservation.getReservationTime());
-                    txtSecondDetail.setText(reservation.getReservationTitle());
-                    txtThirdDetail.setText(reservation.getReservationOwner());
+
+                    if(reservation.isBooked()) {
+                        showBooked(reservation);
+                    } else {
+                        showFree(reservation);
+                    }
                 }
             }
         });
+    }
+
+    private void showFree(Reservation reservation) {
+        vwContainer.setBackgroundColor(ContextCompat.getColor(this, R.color.free));
+        txtStatus.setTextColor(ContextCompat.getColor(this, R.color.booked));
+        txtThirdDetail.setTextColor(ContextCompat.getColor(this, R.color.booked));
+
+        txtRoom.setText(reservation.getReservationRoom());
+        txtStatus.setText("Free");
+        txtTime.setText(reservation.getCurrentTime());
+        txtFirstDetail.setText(reservation.getReservationTime());
+        txtSecondDetail.setText(reservation.getReservationTitle());
+        txtThirdDetail.setText(reservation.getReservationOwner());
+    }
+
+    private void showBooked(Reservation reservation) {
+        vwContainer.setBackgroundColor(ContextCompat.getColor(this, R.color.booked));
+        txtStatus.setTextColor(ContextCompat.getColor(this, R.color.free));
+        txtThirdDetail.setTextColor(ContextCompat.getColor(this, R.color.free));
+
+        txtRoom.setText(reservation.getReservationRoom());
+        txtStatus.setText("Booked");
+        txtTime.setText(reservation.getCurrentTime());
+        txtFirstDetail.setText(reservation.getReservationTime());
+        txtSecondDetail.setText(reservation.getReservationTitle());
+        txtThirdDetail.setText(reservation.getReservationOwner());
     }
 
     /**

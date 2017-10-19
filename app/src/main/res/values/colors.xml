@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="free">#FFFC468D</color>
+    <color name="booked">#FF5F259F</color>
+</resources>
