@@ -32,6 +32,8 @@ import com.google.api.services.calendar.CalendarScopes;
 import java.util.Arrays;
 import java.util.List;
 
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
+
 /**
  * Created by miguel on 5/29/15.
  */
@@ -58,6 +60,11 @@ public class MainActivity extends Activity {
     private TextView txtSecondDetail;
     private TextView txtThirdDetail;
     private View vwContainer;
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
 
     /**
      * Create the main activity.
