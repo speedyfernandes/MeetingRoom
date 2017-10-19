@@ -14,6 +14,8 @@ public class DigitalMeetingRoomApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
+        //TODO: Change the App Package name
+        //TODO: Use the new Support Library stuff for Custom Fonts
         CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
                 .setDefaultFontPath("fonts/Rubik-Bold.ttf")
                 .setFontAttrId(R.attr.fontPath)
