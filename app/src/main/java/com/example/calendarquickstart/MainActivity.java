@@ -1,31 +1,27 @@
 package com.example.calendarquickstart;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.api.client.extensions.android.http.AndroidHttp;
-import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
-import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.google.api.client.json.JsonFactory;
-import com.google.api.client.json.gson.GsonFactory;
-import com.google.api.client.http.HttpTransport;
-import com.google.api.client.util.ExponentialBackOff;
-
-import com.google.api.services.calendar.CalendarScopes;
-
 import android.accounts.AccountManager;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.text.method.ScrollingMovementMethod;
-import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.api.client.extensions.android.http.AndroidHttp;
+import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
+import com.google.api.client.http.HttpTransport;
+import com.google.api.client.json.JsonFactory;
+import com.google.api.client.json.gson.GsonFactory;
+import com.google.api.client.util.ExponentialBackOff;
+import com.google.api.services.calendar.CalendarScopes;
 
 import java.util.Arrays;
 import java.util.List;
@@ -35,58 +31,44 @@ import java.util.List;
  */
 
 public class MainActivity extends Activity {
+    static final int REQUEST_ACCOUNT_PICKER = 1000;
+    static final int REQUEST_AUTHORIZATION = 1001;
+    static final int REQUEST_GOOGLE_PLAY_SERVICES = 1002;
+    private static final String PREF_ACCOUNT_NAME = "accountName";
+    private static final String[] SCOPES = {CalendarScopes.CALENDAR_READONLY};
+    final HttpTransport transport = AndroidHttp.newCompatibleTransport();
+    final JsonFactory jsonFactory = GsonFactory.getDefaultInstance();
     /**
      * A Google Calendar API service object used to access the API.
      * Note: Do not confuse this class with API library's model classes, which
      * represent specific data structures.
      */
     com.google.api.services.calendar.Calendar mService;
-
     GoogleAccountCredential credential;
-    private TextView mStatusText;
-    private TextView mResultsText;
-    final HttpTransport transport = AndroidHttp.newCompatibleTransport();
-    final JsonFactory jsonFactory = GsonFactory.getDefaultInstance();
-
-    static final int REQUEST_ACCOUNT_PICKER = 1000;
-    static final int REQUEST_AUTHORIZATION = 1001;
-    static final int REQUEST_GOOGLE_PLAY_SERVICES = 1002;
-    private static final String PREF_ACCOUNT_NAME = "accountName";
-    private static final String[] SCOPES = { CalendarScopes.CALENDAR_READONLY };
+    private TextView txtRoom;
+    private TextView txtStatus;
+    private TextView txtTime;
+    private TextView txtFirstDetail;
+    private TextView txtSecondDetail;
+    private TextView txtThirdDetail;
 
     /**
      * Create the main activity.
+     *
      * @param savedInstanceState previously saved instance data.
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        LinearLayout activityLayout = new LinearLayout(this);
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.MATCH_PARENT);
-        activityLayout.setLayoutParams(lp);
-        activityLayout.setOrientation(LinearLayout.VERTICAL);
-        activityLayout.setPadding(16, 16, 16, 16);
 
-        ViewGroup.LayoutParams tlp = new ViewGroup.LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT);
+        setContentView(R.layout.activity_main);
 
-        mStatusText = new TextView(this);
-        mStatusText.setLayoutParams(tlp);
-        mStatusText.setTypeface(null, Typeface.BOLD);
-        mStatusText.setText("Retrieving data...");
-        activityLayout.addView(mStatusText);
-
-        mResultsText = new TextView(this);
-        mResultsText.setLayoutParams(tlp);
-        mResultsText.setPadding(16, 16, 16, 16);
-        mResultsText.setVerticalScrollBarEnabled(true);
-        mResultsText.setMovementMethod(new ScrollingMovementMethod());
-        activityLayout.addView(mResultsText);
-
-        setContentView(activityLayout);
+        txtRoom = (TextView) findViewById(R.id.txtRoom);
+        txtStatus = (TextView) findViewById(R.id.txtStatus);
+        txtTime = (TextView) findViewById(R.id.txtTime);
+        txtThirdDetail = (TextView) findViewById(R.id.txtThirdDetail);
+        txtSecondDetail = (TextView) findViewById(R.id.txtSecondDetail);
+        txtFirstDetail = (TextView) findViewById(R.id.txtFirstDetail);
 
         // Initialize credentials and service object.
         SharedPreferences settings = getPreferences(Context.MODE_PRIVATE);
@@ -111,7 +93,7 @@ public class MainActivity extends Activity {
         if (isGooglePlayServicesAvailable()) {
             refreshResults();
         } else {
-            mStatusText.setText("Google Play Services required: " +
+            showMessage("Google Play Services required: " +
                     "after installing, close and relaunch this app.");
         }
     }
@@ -120,17 +102,18 @@ public class MainActivity extends Activity {
      * Called when an activity launched here (specifically, AccountPicker
      * and authorization) exits, giving you the requestCode you started it with,
      * the resultCode it returned, and any additional data from it.
+     *
      * @param requestCode code indicating which activity result is incoming.
-     * @param resultCode code indicating the result of the incoming
-     *     activity result.
-     * @param data Intent (containing result data) returned by incoming
-     *     activity result.
+     * @param resultCode  code indicating the result of the incoming
+     *                    activity result.
+     * @param data        Intent (containing result data) returned by incoming
+     *                    activity result.
      */
     @Override
     protected void onActivityResult(
             int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        switch(requestCode) {
+        switch (requestCode) {
             case REQUEST_GOOGLE_PLAY_SERVICES:
                 if (resultCode == RESULT_OK) {
                     refreshResults();
@@ -153,7 +136,7 @@ public class MainActivity extends Activity {
                         refreshResults();
                     }
                 } else if (resultCode == RESULT_CANCELED) {
-                    mStatusText.setText("Account unspecified.");
+                    showMessage("Account unspecified.");
                 }
                 break;
             case REQUEST_AUTHORIZATION:
@@ -180,30 +163,16 @@ public class MainActivity extends Activity {
             if (isDeviceOnline()) {
                 new ApiAsyncTask(this).execute();
             } else {
-                mStatusText.setText("No network connection available.");
+                showMessage("No network connection available.");
             }
         }
-    }
-
-    /**
-     * Clear any existing Google Calendar API data from the TextView and update
-     * the header message; called from background threads and async tasks
-     * that need to update the UI (in the UI thread).
-     */
-    public void clearResultsText() {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                mStatusText.setText("Retrieving data…");
-                mResultsText.setText("");
-            }
-        });
     }
 
     /**
      * Fill the data TextView with the given List of Strings; called from
      * background threads and async tasks that need to update the UI (in the
      * UI thread).
+     *
      * @param dataStrings a List of Strings to populate the main TextView with.
      */
     public void updateResultsText(final List<String> dataStrings) {
@@ -211,13 +180,11 @@ public class MainActivity extends Activity {
             @Override
             public void run() {
                 if (dataStrings == null) {
-                    mStatusText.setText("Error retrieving data!");
+                    showMessage("Error retrieving data!");
                 } else if (dataStrings.size() == 0) {
-                    mStatusText.setText("No data found.");
+                    showMessage("No data found.");
                 } else {
-                    mStatusText.setText("Data retrieved using" +
-                            " the Google Calendar API:");
-                    mResultsText.setText(TextUtils.join("\n\n", dataStrings));
+                    //mResultsText.setText(TextUtils.join("\n\n", dataStrings));
                 }
             }
         });
@@ -226,13 +193,14 @@ public class MainActivity extends Activity {
     /**
      * Show a status message in the list header TextView; called from background
      * threads and async tasks that need to update the UI (in the UI thread).
+     *
      * @param message a String to display in the UI header TextView.
      */
     public void updateStatus(final String message) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                mStatusText.setText(message);
+                showMessage(message);
             }
         });
     }
@@ -248,6 +216,7 @@ public class MainActivity extends Activity {
 
     /**
      * Checks whether the device currently has a network connection.
+     *
      * @return true if the device has a network connection, false otherwise.
      */
     private boolean isDeviceOnline() {
@@ -261,8 +230,9 @@ public class MainActivity extends Activity {
      * Check that Google Play services APK is installed and up to date. Will
      * launch an error dialog for the user to update Google Play Services if
      * possible.
+     *
      * @return true if Google Play Services is available and up to
-     *     date on this device; false otherwise.
+     * date on this device; false otherwise.
      */
     private boolean isGooglePlayServicesAvailable() {
         final int connectionStatusCode =
@@ -270,7 +240,7 @@ public class MainActivity extends Activity {
         if (GooglePlayServicesUtil.isUserRecoverableError(connectionStatusCode)) {
             showGooglePlayServicesAvailabilityErrorDialog(connectionStatusCode);
             return false;
-        } else if (connectionStatusCode != ConnectionResult.SUCCESS ) {
+        } else if (connectionStatusCode != ConnectionResult.SUCCESS) {
             return false;
         }
         return true;
@@ -279,8 +249,9 @@ public class MainActivity extends Activity {
     /**
      * Display an error dialog showing that Google Play Services is missing
      * or out of date.
+     *
      * @param connectionStatusCode code describing the presence (or lack of)
-     *     Google Play Services on this device.
+     *                             Google Play Services on this device.
      */
     void showGooglePlayServicesAvailabilityErrorDialog(
             final int connectionStatusCode) {
@@ -294,6 +265,10 @@ public class MainActivity extends Activity {
                 dialog.show();
             }
         });
+    }
+
+    void showMessage(String message) {
+        Toast.makeText(MainActivity.this, message, Toast.LENGTH_LONG).show();
     }
 
 }
