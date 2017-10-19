@@ -5,6 +5,8 @@ import com.google.api.client.googleapis.extensions.android.gms.auth.GooglePlaySe
 import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException;
 import com.google.api.client.util.DateTime;
 
+import com.google.api.services.calendar.*;
+import com.google.api.services.calendar.Calendar;
 import com.google.api.services.calendar.model.*;
 
 import java.io.IOException;
@@ -38,7 +40,6 @@ public class ApiAsyncTask extends AsyncTask<Void, Void, Void> {
     @Override
     protected Void doInBackground(Void... params) {
         try {
-            mActivity.clearResultsText();
             mActivity.updateResultsText(getDataFromApi());
 
         } catch (final GooglePlayServicesAvailabilityIOException availabilityException) {
@@ -64,9 +65,12 @@ public class ApiAsyncTask extends AsyncTask<Void, Void, Void> {
      */
     private List<String> getDataFromApi() throws IOException {
         // List the next 10 events from the primary calendar.
-        DateTime now = new DateTime(System.currentTimeMillis());
+
+        //CalendarList list = mActivity.mService.calendarList().list().execute();
+
+        DateTime now = new DateTime(System.currentTimeMillis() - 60 * 1000 * 60 * 12);
         List<String> eventStrings = new ArrayList<String>();
-        Events events = mActivity.mService.events().list("primary")
+        Events events = mActivity.mService.events().list("fluxfederation.com_2d35333437393138333334@resource.calendar.google.com")
                 .setMaxResults(10)
                 .setTimeMin(now)
                 .setOrderBy("startTime")
