@@ -8,12 +8,12 @@
     <style name="TextBody" parent="@android:style/TextAppearance">
         <item name="android:textColor">@android:color/white</item>
         <item name="android:textSize">@dimen/bodySize</item>
-        <item name="android:includeFontPadding">false</item>
         <item name="android:textStyle">bold</item>
     </style>
 
     <style name="TextHeader" parent="@style/TextBody">
         <item name="android:textSize">@dimen/headerSize</item>
+        <item name="android:includeFontPadding">false</item>
     </style>
 
 </resources>
