@@ -51,7 +51,7 @@ public class Reservation {
     public String getReservationOwner() {
         // TODO: Move this to the view layer
         if(reservationOwner == null) {
-            return "Using Google Calendars";
+            return "Google Calendars";
         }
 
         return reservationOwner.getDisplayName() != null ?

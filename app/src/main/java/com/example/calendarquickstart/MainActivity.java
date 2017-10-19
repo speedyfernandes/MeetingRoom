@@ -6,11 +6,15 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.text.Spannable;
+import android.text.SpannableString;
 import android.text.TextUtils;
+import android.text.style.ForegroundColorSpan;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -187,7 +191,7 @@ public class MainActivity extends Activity {
                     showMessage("Error retrieving data!");
                 } else {
 
-                    if(reservation.isBooked()) {
+                    if (reservation.isBooked()) {
                         showBooked(reservation);
                     } else {
                         showFree(reservation);
@@ -207,7 +211,16 @@ public class MainActivity extends Activity {
         txtTime.setText(reservation.getCurrentTime());
         txtFirstDetail.setText(reservation.getReservationTime());
         txtSecondDetail.setText(reservation.getReservationTitle());
-        txtThirdDetail.setText(reservation.getReservationOwner());
+
+        String prefix = "Using";
+        Spannable wordtoSpan = new SpannableString(String.format("%s %s", prefix,
+                reservation.getReservationOwner()));
+        wordtoSpan.setSpan(new ForegroundColorSpan(Color.WHITE),
+                0, prefix.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+        wordtoSpan.setSpan(new ForegroundColorSpan(ContextCompat.getColor(this, R.color.booked)),
+                prefix.length() + 1, wordtoSpan.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+
+        txtThirdDetail.setText(wordtoSpan);
     }
 
     private void showBooked(Reservation reservation) {
@@ -220,7 +233,16 @@ public class MainActivity extends Activity {
         txtTime.setText(reservation.getCurrentTime());
         txtFirstDetail.setText(reservation.getReservationTime());
         txtSecondDetail.setText(reservation.getReservationTitle());
-        txtThirdDetail.setText(reservation.getReservationOwner());
+
+        String prefix = "With";
+        Spannable wordtoSpan = new SpannableString(String.format("%s %s", prefix,
+                reservation.getReservationOwner()));
+        wordtoSpan.setSpan(new ForegroundColorSpan(Color.WHITE),
+                0, prefix.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+        wordtoSpan.setSpan(new ForegroundColorSpan(ContextCompat.getColor(this, R.color.free)),
+                prefix.length() + 1, wordtoSpan.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+
+        txtThirdDetail.setText(wordtoSpan);
     }
 
     /**
