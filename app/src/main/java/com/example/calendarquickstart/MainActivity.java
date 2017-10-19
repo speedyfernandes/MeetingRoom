@@ -10,11 +10,12 @@ import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.content.ContextCompat;
 import android.text.Spannable;
 import android.text.SpannableString;
-import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,7 +31,6 @@ import com.google.api.client.util.ExponentialBackOff;
 import com.google.api.services.calendar.CalendarScopes;
 
 import java.util.Arrays;
-import java.util.List;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
@@ -42,6 +42,7 @@ public class MainActivity extends Activity {
     static final int REQUEST_ACCOUNT_PICKER = 1000;
     static final int REQUEST_AUTHORIZATION = 1001;
     static final int REQUEST_GOOGLE_PLAY_SERVICES = 1002;
+    private static final long ROOMLIST_REFRESH_PERIOD = 10 * 1000;
     private static final String PREF_ACCOUNT_NAME = "accountName";
     private static final String[] SCOPES = {CalendarScopes.CALENDAR_READONLY};
     final HttpTransport transport = AndroidHttp.newCompatibleTransport();
@@ -107,10 +108,17 @@ public class MainActivity extends Activity {
         super.onResume();
         if (isGooglePlayServicesAvailable()) {
             refreshResults();
+            startAutoRefreshData();
         } else {
             showMessage("Google Play Services required: " +
                     "after installing, close and relaunch this app.");
         }
+    }
+
+    @Override
+    public void onPause() {
+        stopAutoRefreshData();
+        super.onPause();
     }
 
     /**
@@ -176,6 +184,7 @@ public class MainActivity extends Activity {
             chooseAccount();
         } else {
             if (isDeviceOnline()) {
+                Log.d("MainActivity", "Refresh data");
                 new ApiAsyncTask(this).execute();
             } else {
                 showMessage("No network connection available.");
@@ -331,6 +340,24 @@ public class MainActivity extends Activity {
 
     void showMessage(String message) {
         Toast.makeText(MainActivity.this, message, Toast.LENGTH_LONG).show();
+    }
+
+    final Handler handler = new Handler();
+
+    final Runnable refreshDataRunnable = new Runnable() {
+        @Override
+        public void run() {
+            refreshResults();
+            startAutoRefreshData();
+        }
+    };
+
+    private void startAutoRefreshData() {
+        handler.postDelayed(refreshDataRunnable, ROOMLIST_REFRESH_PERIOD);
+    }
+
+    private void stopAutoRefreshData() {
+        handler.removeCallbacks(refreshDataRunnable);
     }
 
 }
