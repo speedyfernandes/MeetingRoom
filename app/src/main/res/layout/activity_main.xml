@@ -7,50 +7,57 @@
     android:padding="@dimen/padding">
 
     <TextView
-        style="@style/TextHeader"
         android:id="@+id/txtRoom"
+        style="@style/TextHeader"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true" />
 
     <TextView
-        style="@style/TextHeader"
         android:id="@+id/txtStatus"
-        android:layout_marginTop="-20dp"
+        style="@style/TextHeader"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_below="@id/txtRoom" />
+        android:layout_below="@id/txtRoom"
+        android:layout_marginTop="-20dp" />
 
     <TextView
-        style="@style/TextBody"
         android:id="@+id/txtTime"
+        style="@style/TextBody"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true" />
 
     <TextView
-        style="@style/TextBody"
         android:id="@+id/txtThirdDetail"
+        style="@style/TextBody"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true" />
 
     <TextView
-        style="@style/TextBody"
         android:id="@+id/txtSecondDetail"
+        style="@style/TextBody"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@id/txtThirdDetail"
         android:layout_alignParentLeft="true" />
 
     <TextView
-        style="@style/TextBody"
         android:id="@+id/txtFirstDetail"
+        style="@style/TextBody"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@id/txtSecondDetail"
         android:layout_alignParentLeft="true" />
+
+    <ImageView
+        android:id="@+id/imgLogo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true" />
 
 </RelativeLayout>

@@ -11,12 +11,14 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.graphics.drawable.VectorDrawableCompat;
 import android.support.v4.content.ContextCompat;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -60,6 +62,7 @@ public class MainActivity extends Activity {
     private TextView txtFirstDetail;
     private TextView txtSecondDetail;
     private TextView txtThirdDetail;
+    private ImageView imgLogo;
     private View vwContainer;
 
     @Override
@@ -85,6 +88,7 @@ public class MainActivity extends Activity {
         txtThirdDetail = (TextView) findViewById(R.id.txtThirdDetail);
         txtSecondDetail = (TextView) findViewById(R.id.txtSecondDetail);
         txtFirstDetail = (TextView) findViewById(R.id.txtFirstDetail);
+        imgLogo = (ImageView) findViewById(R.id.imgLogo);
 
         // Initialize credentials and service object.
         SharedPreferences settings = getPreferences(Context.MODE_PRIVATE);
@@ -237,6 +241,9 @@ public class MainActivity extends Activity {
                 prefix.length() + 1, wordtoSpan.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
 
         txtThirdDetail.setText(wordtoSpan);
+
+        imgLogo.setImageDrawable(VectorDrawableCompat.create(getResources(),
+                R.drawable.ic_flux_logo_free, getTheme()));
     }
 
     private void showBooked(Reservation reservation) {
@@ -259,6 +266,9 @@ public class MainActivity extends Activity {
                 prefix.length() + 1, wordtoSpan.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
 
         txtThirdDetail.setText(wordtoSpan);
+
+        imgLogo.setImageDrawable(VectorDrawableCompat.create(getResources(),
+                R.drawable.ic_flux_logo_booked, getTheme()));
     }
 
     /**
