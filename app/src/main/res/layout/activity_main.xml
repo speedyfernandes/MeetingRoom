@@ -7,13 +7,14 @@
     android:padding="@dimen/padding">
 
     <TextView
+        style="@style/TextHeader"
         android:id="@+id/txtRoom"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:textColor="@android:color/white" />
+        android:layout_alignParentLeft="true" />
 
     <TextView
+        style="@style/TextHeader"
         android:id="@+id/txtStatus"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -21,34 +22,34 @@
         android:layout_below="@id/txtRoom" />
 
     <TextView
+        style="@style/TextBody"
         android:id="@+id/txtTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:textColor="@android:color/white" />
+        android:layout_alignParentRight="true" />
 
     <TextView
+        style="@style/TextBody"
         android:id="@+id/txtThirdDetail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:inputType="textCapWords" />
+        android:layout_alignParentLeft="true" />
 
     <TextView
+        style="@style/TextBody"
         android:id="@+id/txtSecondDetail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@id/txtThirdDetail"
-        android:layout_alignParentLeft="true"
-        android:textColor="@android:color/white" />
+        android:layout_alignParentLeft="true" />
 
     <TextView
+        style="@style/TextBody"
         android:id="@+id/txtFirstDetail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@id/txtSecondDetail"
-        android:layout_alignParentLeft="true"
-        android:textColor="@android:color/white" />
+        android:layout_alignParentLeft="true" />
 
 </RelativeLayout>

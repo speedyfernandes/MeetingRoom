@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="padding">20dp</dimen>
+    <dimen name="padding">40dp</dimen>
+    <dimen name="bodySize">20sp</dimen>
+    <dimen name="headerSize">80sp</dimen>
+
 </resources>
