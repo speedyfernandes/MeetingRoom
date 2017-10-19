@@ -12,7 +12,7 @@ import java.util.Locale;
 
 public class Reservation {
 
-    private static final SimpleDateFormat ISO8601 = new SimpleDateFormat("HH:mm a", Locale.US);
+    private static final SimpleDateFormat ISO8601 = new SimpleDateFormat("HH:mma", Locale.US);
 
     private boolean booked;
     private Date currentTime;
@@ -37,7 +37,7 @@ public class Reservation {
 
     public String getReservationRoom() {
         // TODO: Move the room name to the Settings model
-        if(reservationRoom == null) {
+        if (reservationRoom == null) {
             return "Bashir";
         }
 
@@ -50,13 +50,15 @@ public class Reservation {
 
     public String getReservationOwner() {
         // TODO: Move this to the view layer
-        if(reservationOwner == null) {
+        if (reservationOwner == null) {
             return "Google Calendars";
         }
 
         return reservationOwner.getDisplayName() != null ?
                 reservationOwner.getDisplayName() :
-                reservationOwner.getEmail().replace("@fluxfederation.com", "").replace(".", " ");
+                getWordsCapitalised(reservationOwner.getEmail()
+                        .replace("@fluxfederation.com", "")
+                        .replace(".", " "));
     }
 
     public void setReservationOwner(Event.Organizer reservationOwner) {
@@ -65,11 +67,11 @@ public class Reservation {
 
     public String getReservationTitle() {
         // TODO: Move this to the view layer
-        if(reservationTitle == null) {
+        if (reservationTitle == null) {
             return "Book Meeting Room";
         }
 
-        return reservationTitle;
+        return getWordsCapitalised(reservationTitle);
     }
 
     public void setReservationTitle(String reservationTitle) {
@@ -77,7 +79,7 @@ public class Reservation {
     }
 
     public String getCurrentTime() {
-        return iso8601(currentTime);
+        return getDateString(currentTime);
     }
 
     public void setCurrentTime(Date currentTime) {
@@ -94,17 +96,27 @@ public class Reservation {
 
     public String getReservationTime() {
         // TODO: Move this to the view layer
-        if(reservationStart == null || reservationEnd == null) {
+        if (reservationStart == null || reservationEnd == null) {
             return " ";
         }
 
-        return String.format("%s - %s", iso8601(reservationStart), iso8601(reservationEnd));
+        return String.format("%s - %s", getDateString(reservationStart), getDateString(reservationEnd));
     }
 
-    public final String iso8601(Date dateTime) {
+    public String getDateString(Date dateTime) {
         if (dateTime == null) {
             return "";
         }
-        return ISO8601.format(dateTime);
+        return ISO8601.format(dateTime).toLowerCase();
+    }
+
+    public String getWordsCapitalised(String stringToCapitalise) {
+        String[] strArray = stringToCapitalise.split(" ");
+        StringBuilder builder = new StringBuilder();
+        for (String s : strArray) {
+            String cap = s.substring(0, 1).toUpperCase() + s.substring(1);
+            builder.append(cap + " ");
+        }
+        return builder.toString();
     }
 }
