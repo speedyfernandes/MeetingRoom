@@ -88,10 +88,11 @@ public class ApiAsyncTask extends AsyncTask<Void, Void, Void> {
             if (start.before(current) && end.after(current)) {
                 reservation.setBooked(true);
                 reservation.setReservationRoom(event.getLocation());
-                reservation.setReservationOwner(event.getOrganizer().getEmail());
+                reservation.setReservationOwner(event.getOrganizer());
                 reservation.setReservationTitle(event.getSummary());
-                reservation.setCurrentTime(now.toStringRfc3339());
-                reservation.setReservationTime("1pm - 2pm");
+                reservation.setCurrentTime(current);
+                reservation.setReservationStart(start);
+                reservation.setReservationEnd(end);
             }
         }
         return reservation;

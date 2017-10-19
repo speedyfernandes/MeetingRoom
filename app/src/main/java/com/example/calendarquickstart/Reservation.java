@@ -1,59 +1,53 @@
 package com.example.calendarquickstart;
 
+import com.google.api.services.calendar.model.Event;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 /**
  * Created by Jerry on 19/10/17.
  */
 
 public class Reservation {
 
+    private static final SimpleDateFormat ISO8601 = new SimpleDateFormat("HH:mm a", Locale.US);
+
     private boolean booked;
-    private String currentTime;
+    private Date currentTime;
     private String reservationRoom;
-    private String reservationTime;
-    private String reservationOwner;
+    private Date reservationStart;
+    private Date reservationEnd;
+    private Event.Organizer reservationOwner;
     private String reservationTitle;
 
     Reservation() {
         booked = false;
     }
 
-    public boolean isBooked() {
-        return booked;
+    public String getStatus() {
+        return booked ? "Booked" : "Free";
     }
 
     public void setBooked(boolean booked) {
         this.booked = booked;
     }
 
-    public String getCurrentTime() {
-        return currentTime;
-    }
-
-    public void setCurrentTime(String currentTime) {
-        this.currentTime = currentTime;
-    }
-
     public String getReservationRoom() {
-        return reservationRoom;
+        return reservationRoom.replace("MR_", "");
     }
 
     public void setReservationRoom(String reservationRoom) {
         this.reservationRoom = reservationRoom;
     }
 
-    public String getReservationTime() {
-        return reservationTime;
-    }
-
-    public void setReservationTime(String reservationTime) {
-        this.reservationTime = reservationTime;
-    }
-
     public String getReservationOwner() {
-        return reservationOwner;
+        return reservationOwner.getDisplayName() != null ?
+                reservationOwner.getDisplayName() : reservationOwner.getEmail();
     }
 
-    public void setReservationOwner(String reservationOwner) {
+    public void setReservationOwner(Event.Organizer reservationOwner) {
         this.reservationOwner = reservationOwner;
     }
 
@@ -63,5 +57,32 @@ public class Reservation {
 
     public void setReservationTitle(String reservationTitle) {
         this.reservationTitle = reservationTitle;
+    }
+
+    public String getCurrentTime() {
+        return iso8601(currentTime);
+    }
+
+    public void setCurrentTime(Date currentTime) {
+        this.currentTime = currentTime;
+    }
+
+    public void setReservationStart(Date reservationStart) {
+        this.reservationStart = reservationStart;
+    }
+
+    public void setReservationEnd(Date reservationEnd) {
+        this.reservationEnd = reservationEnd;
+    }
+
+    public String getReservationTime() {
+        return String.format("%s - %s", iso8601(reservationStart), iso8601(reservationEnd));
+    }
+
+    public  final String iso8601(Date dateTime) {
+        if (dateTime == null) {
+            return "";
+        }
+        return ISO8601.format(dateTime);
     }
 }

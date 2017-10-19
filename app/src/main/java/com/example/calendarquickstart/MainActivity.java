@@ -183,7 +183,7 @@ public class MainActivity extends Activity {
                     showMessage("Error retrieving data!");
                 } else {
                     txtRoom.setText(reservation.getReservationRoom());
-                    txtStatus.setText(reservation.isBooked() ? "Booked" : "Free");
+                    txtStatus.setText(reservation.getStatus());
                     txtTime.setText(reservation.getCurrentTime());
                     txtFirstDetail.setText(reservation.getReservationTime());
                     txtSecondDetail.setText(reservation.getReservationTitle());
