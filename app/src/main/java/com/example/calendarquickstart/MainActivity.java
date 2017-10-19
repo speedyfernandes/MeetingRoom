@@ -169,22 +169,25 @@ public class MainActivity extends Activity {
     }
 
     /**
-     * Fill the data TextView with the given List of Strings; called from
+     * Update the screen with the given Reservation; called from
      * background threads and async tasks that need to update the UI (in the
      * UI thread).
      *
-     * @param dataStrings a List of Strings to populate the main TextView with.
+     * @param reservation a Reservation object to populate the screen with.
      */
-    public void updateResultsText(final List<String> dataStrings) {
+    public void updateReservation(final Reservation reservation) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                if (dataStrings == null) {
+                if (reservation == null) {
                     showMessage("Error retrieving data!");
-                } else if (dataStrings.size() == 0) {
-                    showMessage("No data found.");
                 } else {
-                    //mResultsText.setText(TextUtils.join("\n\n", dataStrings));
+                    txtRoom.setText(reservation.getReservationRoom());
+                    txtStatus.setText(reservation.isBooked() ? "Booked" : "Free");
+                    txtTime.setText(reservation.getCurrentTime());
+                    txtFirstDetail.setText(reservation.getReservationTime());
+                    txtSecondDetail.setText(reservation.getReservationTitle());
+                    txtThirdDetail.setText(reservation.getReservationOwner());
                 }
             }
         });

@@ -1,16 +1,15 @@
 package com.example.calendarquickstart;
 
 import android.os.AsyncTask;
+
 import com.google.api.client.googleapis.extensions.android.gms.auth.GooglePlayServicesAvailabilityIOException;
 import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException;
 import com.google.api.client.util.DateTime;
 
-import com.google.api.services.calendar.*;
-import com.google.api.services.calendar.Calendar;
 import com.google.api.services.calendar.model.*;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -27,6 +26,7 @@ public class ApiAsyncTask extends AsyncTask<Void, Void, Void> {
 
     /**
      * Constructor.
+     *
      * @param activity MainActivity that spawned this task.
      */
     ApiAsyncTask(MainActivity activity) {
@@ -35,12 +35,13 @@ public class ApiAsyncTask extends AsyncTask<Void, Void, Void> {
 
     /**
      * Background task to call Google Calendar API.
+     *
      * @param params no parameters needed for this task.
      */
     @Override
     protected Void doInBackground(Void... params) {
         try {
-            mActivity.updateResultsText(getDataFromApi());
+            mActivity.updateReservation(getDataFromApi());
 
         } catch (final GooglePlayServicesAvailabilityIOException availabilityException) {
             mActivity.showGooglePlayServicesAvailabilityErrorDialog(
@@ -60,16 +61,16 @@ public class ApiAsyncTask extends AsyncTask<Void, Void, Void> {
 
     /**
      * Fetch a list of the next 10 events from the primary calendar.
+     *
      * @return List of Strings describing returned events.
      * @throws IOException
      */
-    private List<String> getDataFromApi() throws IOException {
+    private Reservation getDataFromApi() throws IOException {
         // List the next 10 events from the primary calendar.
 
         //CalendarList list = mActivity.mService.calendarList().list().execute();
 
         DateTime now = new DateTime(System.currentTimeMillis() - 60 * 1000 * 60 * 12);
-        List<String> eventStrings = new ArrayList<String>();
         Events events = mActivity.mService.events().list("fluxfederation.com_2d35333437393138333334@resource.calendar.google.com")
                 .setMaxResults(10)
                 .setTimeMin(now)
@@ -78,17 +79,22 @@ public class ApiAsyncTask extends AsyncTask<Void, Void, Void> {
                 .execute();
         List<Event> items = events.getItems();
 
+        Reservation reservation = new Reservation();
+
         for (Event event : items) {
-            DateTime start = event.getStart().getDateTime();
-            if (start == null) {
-                // All-day events don't have start times, so just use
-                // the start date.
-                start = event.getStart().getDate();
+            Date start = new Date(event.getStart().getDateTime().getValue());
+            Date end = new Date(event.getEnd().getDateTime().getValue());
+            Date current = new Date(now.getValue());
+            if (start.before(current) && end.after(current)) {
+                reservation.setBooked(true);
+                reservation.setReservationRoom(event.getLocation());
+                reservation.setReservationOwner(event.getOrganizer().getEmail());
+                reservation.setReservationTitle(event.getSummary());
+                reservation.setCurrentTime(now.toStringRfc3339());
+                reservation.setReservationTime("1pm - 2pm");
             }
-            eventStrings.add(
-                    String.format("%s (%s)", event.getSummary(), start));
         }
-        return eventStrings;
+        return reservation;
     }
 
 }
