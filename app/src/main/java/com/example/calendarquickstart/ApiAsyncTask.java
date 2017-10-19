@@ -29,6 +29,7 @@ public class ApiAsyncTask extends AsyncTask<Void, Void, Void> {
      *
      * @param activity MainActivity that spawned this task.
      */
+    //TODO: Decouple from Main Activity
     ApiAsyncTask(MainActivity activity) {
         this.mActivity = activity;
     }
