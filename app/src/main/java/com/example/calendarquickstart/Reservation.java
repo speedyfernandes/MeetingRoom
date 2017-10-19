@@ -44,7 +44,8 @@ public class Reservation {
 
     public String getReservationOwner() {
         return reservationOwner.getDisplayName() != null ?
-                reservationOwner.getDisplayName() : reservationOwner.getEmail();
+                reservationOwner.getDisplayName() :
+                reservationOwner.getEmail().replace("@fluxfederation.com", "").replace(".", " ");
     }
 
     public void setReservationOwner(Event.Organizer reservationOwner) {
@@ -79,7 +80,7 @@ public class Reservation {
         return String.format("%s - %s", iso8601(reservationStart), iso8601(reservationEnd));
     }
 
-    public  final String iso8601(Date dateTime) {
+    public final String iso8601(Date dateTime) {
         if (dateTime == null) {
             return "";
         }

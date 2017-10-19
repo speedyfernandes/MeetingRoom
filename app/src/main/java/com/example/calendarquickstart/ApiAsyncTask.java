@@ -5,8 +5,8 @@ import android.os.AsyncTask;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GooglePlayServicesAvailabilityIOException;
 import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException;
 import com.google.api.client.util.DateTime;
-
-import com.google.api.services.calendar.model.*;
+import com.google.api.services.calendar.model.Event;
+import com.google.api.services.calendar.model.Events;
 
 import java.io.IOException;
 import java.util.Date;
