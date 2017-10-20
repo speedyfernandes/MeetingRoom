@@ -2,4 +2,5 @@
 <resources>
     <color name="free">#FFFC468D</color>
     <color name="booked">#FF5F259F</color>
+    <color name="free_pressed">#80FC468D</color>
 </resources>

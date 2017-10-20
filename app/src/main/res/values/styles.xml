@@ -5,6 +5,11 @@
         <!-- Customize your theme here. -->
     </style>
 
+    <style name="AppTheme.NoActionBar" parent="AppTheme">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
     <style name="TextBody" parent="@android:style/TextAppearance">
         <item name="android:textColor">@android:color/white</item>
         <item name="android:textSize">@dimen/bodySize</item>
@@ -15,6 +20,11 @@
     <style name="TextHeader" parent="@style/TextBody">
         <item name="android:textSize">@dimen/headerSize</item>
         <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="Button" parent="@android:style/Widget.Button">
+        <item name="android:background">@drawable/selector_rounded_primary</item>
+        <item name="android:textColor">@android:color/white</item>
     </style>
 
 </resources>

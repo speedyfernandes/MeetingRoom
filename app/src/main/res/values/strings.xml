@@ -6,4 +6,5 @@
     <string name="booked">Booked</string>
     <string name="with">With</string>
     <string name="book_meeting_room">Book Meeting Room</string>
+    <string name="login">Login</string>
 </resources>
