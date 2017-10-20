@@ -49,11 +49,6 @@ public class Reservation {
     }
 
     public String getReservationOwner() {
-        // TODO: Move this to the view layer
-        if (reservationOwner == null) {
-            return "Google Calendars";
-        }
-
         return reservationOwner.getDisplayName() != null ?
                 reservationOwner.getDisplayName() :
                 getWordsCapitalised(reservationOwner.getEmail()
@@ -66,11 +61,6 @@ public class Reservation {
     }
 
     public String getReservationTitle() {
-        // TODO: Move this to the view layer
-        if (reservationTitle == null) {
-            return "Book Meeting Room";
-        }
-
         return getWordsCapitalised(reservationTitle);
     }
 
@@ -95,11 +85,6 @@ public class Reservation {
     }
 
     public String getReservationTime() {
-        // TODO: Move this to the view layer
-        if (reservationStart == null || reservationEnd == null) {
-            return " ";
-        }
-
         return String.format("%s - %s", getDateString(reservationStart), getDateString(reservationEnd));
     }
 

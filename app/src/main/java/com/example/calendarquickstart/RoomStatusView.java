@@ -65,14 +65,14 @@ public class RoomStatusView extends RelativeLayout {
         txtThirdDetail.setTextColor(ContextCompat.getColor(context, R.color.booked));
 
         txtRoom.setText(reservation.getReservationRoom());
-        txtStatus.setText("Free");
+        txtStatus.setText(context.getString(R.string.free));
         txtTime.setText(reservation.getCurrentTime());
-        txtFirstDetail.setText(reservation.getReservationTime());
-        txtSecondDetail.setText(reservation.getReservationTitle());
+        txtFirstDetail.setText("");
+        txtSecondDetail.setText(context.getString(R.string.book_meeting_room));
 
-        String prefix = "Using";
+        String prefix = context.getString(R.string.using);
         Spannable wordtoSpan = new SpannableString(String.format("%s %s", prefix,
-                reservation.getReservationOwner()));
+                context.getString(R.string.google_calendars)));
         wordtoSpan.setSpan(new ForegroundColorSpan(Color.WHITE),
                 0, prefix.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
         wordtoSpan.setSpan(new ForegroundColorSpan(ContextCompat.getColor(context, R.color.booked)),
@@ -90,12 +90,12 @@ public class RoomStatusView extends RelativeLayout {
         txtThirdDetail.setTextColor(ContextCompat.getColor(context, R.color.free));
 
         txtRoom.setText(reservation.getReservationRoom());
-        txtStatus.setText("Booked");
+        txtStatus.setText(context.getString(R.string.booked));
         txtTime.setText(reservation.getCurrentTime());
         txtFirstDetail.setText(reservation.getReservationTime());
         txtSecondDetail.setText(reservation.getReservationTitle());
 
-        String prefix = "With";
+        String prefix = context.getString(R.string.with);
         Spannable wordtoSpan = new SpannableString(String.format("%s %s", prefix,
                 reservation.getReservationOwner()));
         wordtoSpan.setSpan(new ForegroundColorSpan(Color.WHITE),

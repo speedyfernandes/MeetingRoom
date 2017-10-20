@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Digital Meeting Room</string>
+    <string name="google_calendars">Google Calendars</string>
+    <string name="free">Free</string>
+    <string name="using">Using</string>
+    <string name="booked">Booked</string>
+    <string name="with">With</string>
+    <string name="book_meeting_room">Book Meeting Room</string>
 </resources>
