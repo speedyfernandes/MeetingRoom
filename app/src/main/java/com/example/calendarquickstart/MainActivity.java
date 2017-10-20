@@ -6,20 +6,11 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.graphics.drawable.VectorDrawableCompat;
-import android.support.v4.content.ContextCompat;
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.style.ForegroundColorSpan;
 import android.util.Log;
-import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -56,14 +47,8 @@ public class MainActivity extends Activity {
      */
     com.google.api.services.calendar.Calendar mService;
     GoogleAccountCredential credential;
-    private TextView txtRoom;
-    private TextView txtStatus;
-    private TextView txtTime;
-    private TextView txtFirstDetail;
-    private TextView txtSecondDetail;
-    private TextView txtThirdDetail;
-    private ImageView imgLogo;
-    private View vwContainer;
+
+    private RoomStatusView vwRoomStatus;
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -81,14 +66,7 @@ public class MainActivity extends Activity {
 
         setContentView(R.layout.activity_main);
 
-        vwContainer = findViewById(R.id.vwContainer);
-        txtRoom = (TextView) findViewById(R.id.txtRoom);
-        txtStatus = (TextView) findViewById(R.id.txtStatus);
-        txtTime = (TextView) findViewById(R.id.txtTime);
-        txtThirdDetail = (TextView) findViewById(R.id.txtThirdDetail);
-        txtSecondDetail = (TextView) findViewById(R.id.txtSecondDetail);
-        txtFirstDetail = (TextView) findViewById(R.id.txtFirstDetail);
-        imgLogo = (ImageView) findViewById(R.id.imgLogo);
+        vwRoomStatus = (RoomStatusView) findViewById(R.id.vwRoomStatus);
 
         // Initialize credentials and service object.
         SharedPreferences settings = getPreferences(Context.MODE_PRIVATE);
@@ -212,67 +190,10 @@ public class MainActivity extends Activity {
                 if (reservation == null) {
                     showMessage("Error retrieving data!");
                 } else {
-
-                    if (reservation.isBooked()) {
-                        showBooked(reservation);
-                    } else {
-                        showFree(reservation);
-                    }
+                    vwRoomStatus.updateStatus(reservation);
                 }
             }
         });
-    }
-
-    //TODO: Make this into it's own custom view which receives the room details
-    private void showFree(Reservation reservation) {
-        vwContainer.setBackgroundColor(ContextCompat.getColor(this, R.color.free));
-        txtStatus.setTextColor(ContextCompat.getColor(this, R.color.booked));
-        txtThirdDetail.setTextColor(ContextCompat.getColor(this, R.color.booked));
-
-        txtRoom.setText(reservation.getReservationRoom());
-        txtStatus.setText("Free");
-        txtTime.setText(reservation.getCurrentTime());
-        txtFirstDetail.setText(reservation.getReservationTime());
-        txtSecondDetail.setText(reservation.getReservationTitle());
-
-        String prefix = "Using";
-        Spannable wordtoSpan = new SpannableString(String.format("%s %s", prefix,
-                reservation.getReservationOwner()));
-        wordtoSpan.setSpan(new ForegroundColorSpan(Color.WHITE),
-                0, prefix.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-        wordtoSpan.setSpan(new ForegroundColorSpan(ContextCompat.getColor(this, R.color.booked)),
-                prefix.length() + 1, wordtoSpan.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-
-        txtThirdDetail.setText(wordtoSpan);
-
-        imgLogo.setImageDrawable(VectorDrawableCompat.create(getResources(),
-                R.drawable.ic_flux_logo_free, getTheme()));
-    }
-
-    //TODO: Make this into it's own custom view which receives the room details and reservation
-    private void showBooked(Reservation reservation) {
-        vwContainer.setBackgroundColor(ContextCompat.getColor(this, R.color.booked));
-        txtStatus.setTextColor(ContextCompat.getColor(this, R.color.free));
-        txtThirdDetail.setTextColor(ContextCompat.getColor(this, R.color.free));
-
-        txtRoom.setText(reservation.getReservationRoom());
-        txtStatus.setText("Booked");
-        txtTime.setText(reservation.getCurrentTime());
-        txtFirstDetail.setText(reservation.getReservationTime());
-        txtSecondDetail.setText(reservation.getReservationTitle());
-
-        String prefix = "With";
-        Spannable wordtoSpan = new SpannableString(String.format("%s %s", prefix,
-                reservation.getReservationOwner()));
-        wordtoSpan.setSpan(new ForegroundColorSpan(Color.WHITE),
-                0, prefix.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-        wordtoSpan.setSpan(new ForegroundColorSpan(ContextCompat.getColor(this, R.color.free)),
-                prefix.length() + 1, wordtoSpan.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-
-        txtThirdDetail.setText(wordtoSpan);
-
-        imgLogo.setImageDrawable(VectorDrawableCompat.create(getResources(),
-                R.drawable.ic_flux_logo_booked, getTheme()));
     }
 
     /**

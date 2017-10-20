@@ -1,63 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/vwContainer"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="@dimen/padding">
+    android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/txtRoom"
-        style="@style/TextHeader"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true" />
-
-    <TextView
-        android:id="@+id/txtStatus"
-        style="@style/TextHeader"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@id/txtRoom"
-        android:layout_marginTop="-20dp" />
-
-    <TextView
-        android:id="@+id/txtTime"
-        style="@style/TextBody"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true" />
-
-    <TextView
-        android:id="@+id/txtThirdDetail"
-        style="@style/TextBody"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true" />
-
-    <TextView
-        android:id="@+id/txtSecondDetail"
-        style="@style/TextBody"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/txtThirdDetail"
-        android:layout_alignParentLeft="true" />
-
-    <TextView
-        android:id="@+id/txtFirstDetail"
-        style="@style/TextBody"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/txtSecondDetail"
-        android:layout_alignParentLeft="true" />
-
-    <ImageView
-        android:id="@+id/imgLogo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true" />
+    <include
+        android:id="@+id/vwRoomStatus"
+        layout="@layout/view_room_status"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
 </RelativeLayout>
